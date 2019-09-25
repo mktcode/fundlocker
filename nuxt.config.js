@@ -1,6 +1,7 @@
 
 export default {
   mode: 'universal',
+  serverMiddleware: ['~/api/index'],
   /*
   ** Headers of the page
   */
@@ -28,7 +29,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/recaptcha'
+    { src: '~/plugins/recaptcha', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules

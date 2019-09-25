@@ -16,6 +16,7 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^2.0.0-rc.11",
+    "express-brute": "^1.0.1",
     "nuxt": "^2.0.0",
     "vue-recaptcha-v3": "^1.5.0"
   },
