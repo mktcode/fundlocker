@@ -1,5 +1,7 @@
 import express from 'express'
+
 import recaptchaController from './controllers/recaptcha'
+import getBalancesController from './controllers/get-balances'
 
 const ExpressBrute = require('express-brute')
 const store = new ExpressBrute.MemoryStore() // stores state locally, don't use this in production
@@ -13,6 +15,7 @@ const app = express()
 app.use(express.json())
 
 app.post('/recaptcha', bruteforce.prevent, recaptchaController)
+app.get('/balances', getBalancesController)
 
 module.exports = {
   path: '/api',
