@@ -7,7 +7,7 @@ export default (req, res) => {
   axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET}&response=${token}`).then((response) => {
     if (response.data.success) {
       res.status(200)
-      res.send({ score: response.data.score })
+      res.send(response.data)
     } else {
       res.status(500)
       res.send(response.data.errors)
