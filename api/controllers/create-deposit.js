@@ -3,10 +3,19 @@ import steem from 'steem'
 import Cryptr from 'cryptr'
 import { getBalances, createDepositQuote, createDepositTransfer } from '../../lib/transferwise'
 
+const getRandomRef = () => {
+  // a trillion possibilities should be enough randomness here:
+  const min = 68719476736 // smallest 10-digit hex value
+  const max = 1099511627775 // biggest 10-digit hex value
+  const random = Math.floor(Math.random() * (max - min + 1) + min)
+  return random.toString(16)
+}
+
 export default (req, res) => {
   const amount = req.body.amount
   const currency = req.body.currency
   const requirements = req.body.requirements
+  const reference = getRandomRef()
 
   const key = uuidv4()
   const cryptr = new Cryptr(key)
@@ -27,7 +36,7 @@ export default (req, res) => {
             process.env.STEEM_POSTING_KEY,
             [],
             [process.env.STEEM_NAME],
-            'deposit',
+            reference,
             JSON.stringify({
               requirements,
               transferId: cryptr.encrypt(transfer.id)
@@ -37,7 +46,7 @@ export default (req, res) => {
                 res.status(500)
                 res.send(error)
               } else {
-                res.send({ transfer, quote, block, key })
+                res.send({ transfer, quote, block, key, reference })
               }
             }
           )
