@@ -29,7 +29,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/recaptcha', ssr: false }
+    { src: '~/plugins/recaptcha', ssr: false },
+    '~/plugins/font-awesome'
   ],
   /*
   ** Nuxt.js dev-modules
