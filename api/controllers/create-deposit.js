@@ -41,12 +41,12 @@ export default (req, res) => {
               requirements,
               transferId: cryptr.encrypt(transfer.id)
             }),
-            (error, block) => {
+            (error, steemTx) => {
               if (error) {
                 res.status(500)
                 res.send(error)
               } else {
-                res.send({ transfer, quote, block, key, reference })
+                res.send({ transfer, quote, steemTx, key, reference })
               }
             }
           )
