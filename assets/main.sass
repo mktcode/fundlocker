@@ -1,2 +1,96 @@
+@import url('https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap')
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap')
+
+@mixin bg-gradient
+  background: rgb(30,87,153)
+  background: -moz-linear-gradient(-45deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
+  background: -webkit-linear-gradient(-45deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
+  background: linear-gradient(135deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#6135c6',GradientType=1 )
+
 *
-  font-family: 'Cairo', sans-serif
+  outline: none !important
+
+body, #__nuxt, #__layout, #__layout > div
+  min-height: 100vh
+
+#__nuxt
+  @include bg-gradient
+
+body, h1, h2, h3, h4, h5
+  font-family: 'Roboto', sans-serif
+  font-weight: 100
+
+.brand
+  font-family: 'Alfa Slab One', cursive
+
+h1.brand
+  font-size: 3.5rem
+
+.alert
+  border-radius: 40px
+
+.btn-primary-dark
+  background-color: #0069d9
+  border-color: #0062cc
+  &:hover
+    background-color: darken(#0069d9, 5%)
+    border-color: darken(#0062cc, 5%)
+
+.btn
+  font-weight: lighter
+  padding: 0.6rem 1.5rem
+  font-size: 1.5rem
+  width: 50%
+  border-radius: 40px
+  &.btn-sm
+    padding: 0.4rem 1rem
+    font-size: 1.2rem
+.lead
+  font-size: 1.7rem
+  line-height: 2rem
+.poweredby
+  opacity: 0.2
+
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity .2s
+
+.fade-enter, .fade-leave-to
+  opacity: 0
+
+#select-currency
+  background: transparent
+  border: none
+  box-shadow: none !important
+  font-size: 3rem
+  font-weight: bold
+  .fa-chevron-down
+    transition: opacity 0.3s
+    opacity: 0.3
+  &:hover
+    .fa-chevron-down
+      opacity: 1
+
+#currency-modal
+  header, footer
+    display: none
+
+  .modal-dialog
+    transition-duration: 0.1s
+    transform: scale(1.05) !important
+    .modal-content
+      border: 0
+      background: transparent
+  &.show
+    .modal-dialog
+      transition-duration: 0.1s
+      transform: scale(1) !important
+
+#select-amount
+  background: transparent
+  font-size: 3rem
+  border: none
+  color: white
+  max-width: 300px
+  font-weight: bold

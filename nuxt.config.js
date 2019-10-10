@@ -13,8 +13,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylehseet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Cairo&display=swap' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
   /*
@@ -30,7 +29,9 @@ export default {
   */
   plugins: [
     { src: '~/plugins/recaptcha', ssr: false },
-    '~/plugins/font-awesome'
+    '~/plugins/font-awesome',
+    '~/plugins/global-components',
+    '~/plugins/vue-currency-input'
   ],
   /*
   ** Nuxt.js dev-modules

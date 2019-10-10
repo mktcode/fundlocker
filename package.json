@@ -24,6 +24,7 @@
     "express-brute": "^1.0.1",
     "nuxt": "^2.0.0",
     "steem": "^0.7.7",
+    "vue-currency-input": "^1.10.1",
     "vue-recaptcha-v3": "^1.5.0"
   },
   "devDependencies": {
