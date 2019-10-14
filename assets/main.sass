@@ -45,9 +45,15 @@ h1.brand
   &.btn-sm
     padding: 0.4rem 1rem
     font-size: 1.2rem
+
+.badge
+  border-radius: 10px
+  font-weight: normal
+
 .lead
   font-size: 1.7rem
   line-height: 2rem
+
 .poweredby
   opacity: 0.2
 
@@ -75,7 +81,12 @@ h1.brand
   opacity: 0.8
 
 #currency-modal,
-#password-modal
+#password-modal,
+#email-modal,
+#date-modal,
+#webhook-modal,
+#bankaccount-modal,
+#socialmedia-modal
   header, footer
     display: none
 
@@ -86,7 +97,9 @@ h1.brand
       border: 0
       background: transparent
       input
+        border: none
         border-radius: 40px
+        text-align: center
   &.show
     .modal-dialog
       transition-duration: 0.1s
@@ -99,3 +112,6 @@ h1.brand
   color: white
   max-width: 300px
   font-weight: bold
+
+::placeholder
+  color: #ccc !important
