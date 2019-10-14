@@ -194,7 +194,6 @@ export default {
       estimatedArrival: null,
       currency: 'USD',
       amount: 0,
-      dateType: 'min',
       requirements: {
         password: null,
         email: {
