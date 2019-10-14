@@ -3,9 +3,9 @@
 
 @mixin bg-gradient
   background: rgb(30,87,153)
-  background: -moz-linear-gradient(-45deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
-  background: -webkit-linear-gradient(-45deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
-  background: linear-gradient(135deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
+  background: -moz-linear-gradient(0deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
+  background: -webkit-linear-gradient(0deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
+  background: linear-gradient(0deg,  rgba(30,87,153,1) 0%, rgba(97,53,198,1) 100%)
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#6135c6',GradientType=1 )
 
 *
@@ -41,7 +41,6 @@ h1.brand
   font-weight: lighter
   padding: 0.6rem 1.5rem
   font-size: 1.5rem
-  width: 50%
   border-radius: 40px
   &.btn-sm
     padding: 0.4rem 1rem
@@ -72,7 +71,11 @@ h1.brand
     .fa-chevron-down
       opacity: 1
 
-#currency-modal
+.modal-backdrop
+  opacity: 0.8
+
+#currency-modal,
+#password-modal
   header, footer
     display: none
 
@@ -82,6 +85,8 @@ h1.brand
     .modal-content
       border: 0
       background: transparent
+      input
+        border-radius: 40px
   &.show
     .modal-dialog
       transition-duration: 0.1s
