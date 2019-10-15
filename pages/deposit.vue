@@ -1,94 +1,90 @@
 <template>
   <b-container class="py-5 w-50">
-    <b-row class="mt-5">
+    <h1 class="text-center text-white mb-4">
+      Deposit
+    </h1>
+    <p class="lead text-white-50 m-0 text-center">
+      Choose a currency, enter the amount and set up your contract.
+    </p>
+    <div class="text-center my-5 d-flex">
+      <b-button
+        id="select-currency"
+        v-b-modal.currency-modal
+        class="d-flex justify-content-end align-items-center w-50"
+      >
+        <font-awesome-icon icon="chevron-down" class="small mr-2" />
+        {{ currency }}
+      </b-button>
+      <currency-input
+        id="select-amount"
+        v-model="amount"
+        :currency="{prefix: null}"
+        :distraction-free="false"
+        :max="100000"
+        class="w-50"
+      />
+    </div>
+    <b-row class="my-3">
       <b-col>
-        <h1 class="text-center text-white mb-4">
-          Deposit
-        </h1>
-        <p class="lead text-white-50 m-0 text-center">
-          Choose a currency, enter the amount and set up your contract.
-        </p>
-        <div class="text-center my-5 d-flex">
-          <b-button
-            id="select-currency"
-            v-b-modal.currency-modal
-            class="d-flex justify-content-end align-items-center w-50"
-          >
-            <font-awesome-icon icon="chevron-down" class="small mr-2" />
-            {{ currency }}
-          </b-button>
-          <currency-input
-            id="select-amount"
-            v-model="amount"
-            :currency="{prefix: null}"
-            :distraction-free="false"
-            :max="100000"
-            class="w-50"
-          />
-        </div>
-        <b-row class="my-3">
-          <b-col>
-            <b-button v-b-modal.password-modal :variant="contract.password ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
-              <font-awesome-icon icon="key" class="small" />
-              Password
-              <font-awesome-icon v-if="contract.password" icon="check" class="text-success" />
-              <i v-else />
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-button v-b-modal.email-modal :variant="contract.email.address ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
-              <font-awesome-icon icon="envelope" class="small" />
-              E-Mail
-              <font-awesome-icon v-if="contract.email.address" icon="check" class="text-success" />
-              <i v-else />
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-button v-b-modal.date-modal :variant="contract.date.date ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
-              <font-awesome-icon icon="calendar" class="small" />
-              Date
-              <font-awesome-icon v-if="contract.date.date" icon="check" class="text-success" />
-              <i v-else />
-            </b-button>
-          </b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col>
-            <b-button v-b-modal.webhook-modal :variant="contract.webhook ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
-              <font-awesome-icon icon="globe" class="small" />
-              Webhook
-              <font-awesome-icon v-if="contract.webhook" icon="check" class="text-success" />
-              <i v-else />
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-button v-b-modal.bankaccount-modal variant="outline-light" size="sm" class="w-100 d-flex align-items-center justify-content-between">
-              <font-awesome-icon icon="university" class="small" />
-              Bank Account
-              <i />
-            </b-button>
-            <b-badge variant="success" class="position-absolute" style="bottom: -5px; right: 5px">
-              Coming soon!
-            </b-badge>
-          </b-col>
-          <b-col>
-            <b-button v-b-modal.socialmedia-modal variant="outline-light" size="sm" class="w-100 d-flex align-items-center justify-content-between">
-              <font-awesome-icon icon="hashtag" class="small" />
-              Social Media
-              <i />
-            </b-button>
-            <b-badge variant="success" class="position-absolute" style="bottom: -5px; right: 5px">
-              Coming soon!
-            </b-badge>
-          </b-col>
-        </b-row>
-        <div class="text-center">
-          <b-button variant="light" size="lg" class="mt-4 px-5" @click="saveContract()">
-            Get Deposit Details
-          </b-button>
-        </div>
+        <b-button v-b-modal.password-modal :variant="contract.password ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
+          <font-awesome-icon icon="key" class="small" />
+          Password
+          <font-awesome-icon v-if="contract.password" icon="check" class="text-success" />
+          <i v-else />
+        </b-button>
+      </b-col>
+      <b-col>
+        <b-button v-b-modal.email-modal :variant="contract.email.address ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
+          <font-awesome-icon icon="envelope" class="small" />
+          E-Mail
+          <font-awesome-icon v-if="contract.email.address" icon="check" class="text-success" />
+          <i v-else />
+        </b-button>
+      </b-col>
+      <b-col>
+        <b-button v-b-modal.date-modal :variant="contract.date.date ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
+          <font-awesome-icon icon="calendar" class="small" />
+          Date
+          <font-awesome-icon v-if="contract.date.date" icon="check" class="text-success" />
+          <i v-else />
+        </b-button>
       </b-col>
     </b-row>
+    <b-row class="my-3">
+      <b-col>
+        <b-button v-b-modal.webhook-modal :variant="contract.webhook ? 'light' : 'outline-light'" size="sm" class="w-100 d-flex align-items-center justify-content-between">
+          <font-awesome-icon icon="globe" class="small" />
+          Webhook
+          <font-awesome-icon v-if="contract.webhook" icon="check" class="text-success" />
+          <i v-else />
+        </b-button>
+      </b-col>
+      <b-col>
+        <b-button v-b-modal.bankaccount-modal variant="outline-light" size="sm" class="w-100 d-flex align-items-center justify-content-between">
+          <font-awesome-icon icon="university" class="small" />
+          Bank Account
+          <i />
+        </b-button>
+        <b-badge variant="success" class="position-absolute" style="bottom: -5px; right: 5px">
+          Coming soon!
+        </b-badge>
+      </b-col>
+      <b-col>
+        <b-button v-b-modal.socialmedia-modal variant="outline-light" size="sm" class="w-100 d-flex align-items-center justify-content-between">
+          <font-awesome-icon icon="hashtag" class="small" />
+          Social Media
+          <i />
+        </b-button>
+        <b-badge variant="success" class="position-absolute" style="bottom: -5px; right: 5px">
+          Coming soon!
+        </b-badge>
+      </b-col>
+    </b-row>
+    <div class="text-center">
+      <b-button variant="light" size="lg" class="mt-4 px-5" @click="saveContract()">
+        Get Deposit Details
+      </b-button>
+    </div>
     <b-modal id="currency-modal" centered>
       <b-alert variant="primary" show class="d-flex align-items-center justify-content-between">
         <font-awesome-icon icon="info" class="fa-2x ml-2 mr-3" />
