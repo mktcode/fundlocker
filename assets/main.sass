@@ -80,6 +80,10 @@ h1.brand
 .modal-backdrop
   opacity: 0.8
 
+.form-control
+  border: none
+  border-radius: 40px
+
 #currency-modal,
 #password-modal,
 #email-modal,
@@ -88,7 +92,8 @@ h1.brand
 #bankaccount-modal,
 #socialmedia-modal,
 #loading-modal,
-#error-modal
+#error-modal,
+#download-modal
   header, footer
     display: none
 
@@ -99,8 +104,6 @@ h1.brand
       border: 0
       background: transparent
       input
-        border: none
-        border-radius: 40px
         text-align: center
   &.show
     .modal-dialog
