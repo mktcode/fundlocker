@@ -15,14 +15,16 @@
         <font-awesome-icon icon="chevron-down" class="small mr-2" />
         {{ currency }}
       </b-button>
-      <currency-input
-        id="select-amount"
-        v-model="amount"
-        :currency="{prefix: null}"
-        :distraction-free="false"
-        :max="100000"
-        class="w-50"
-      />
+      <client-only>
+        <currency-input
+          id="select-amount"
+          v-model="amount"
+          :currency="{prefix: null}"
+          :distraction-free="false"
+          :max="100000"
+          class="w-50"
+        />
+      </client-only>
     </div>
     <b-row class="my-3">
       <b-col>
@@ -81,8 +83,8 @@
       </b-col>
     </b-row>
     <div class="text-center">
-      <b-button variant="light" size="lg" class="mt-4 px-5" @click="saveContract()">
-        Get Deposit Details
+      <b-button variant="light" size="lg" class="mt-4 px-5" @click="createContract()">
+        Create Contract
       </b-button>
     </div>
     <b-modal id="currency-modal" centered>
@@ -172,7 +174,7 @@
     <b-modal id="loading-modal" centered no-close-on-esc no-close-on-backdrop>
       <b-alert variant="primary" show class="d-flex align-items-center justify-content-between">
         <font-awesome-icon icon="spinner" spin class="fa-2x ml-2 mr-3" />
-        Your contract is being stored. One moment please.
+        Your contract is being created. One moment please.
       </b-alert>
     </b-modal>
     <b-modal id="error-modal" centered>
@@ -184,6 +186,43 @@
         </nuxt-link>
       </b-alert>
     </b-modal>
+    <b-modal id="download-modal" centered no-close-on-esc no-close-on-backdrop>
+      <b-alert variant="success" show>
+        <h5 class="d-flex align-items-center m-0">
+          <font-awesome-icon icon="check" class="mr-2" />
+          Your contract has been created successfully!
+        </h5>
+      </b-alert>
+      <b-alert variant="info" show class="py-4">
+        Download the contract, including the deposit information and your refund code.
+        With this code, you can trigger an automated refund to <b>your(!)</b> bank account, at any time.
+        <div class="text-center my-3">
+          <a
+            :href="downloadLink"
+            :download="'contract-' + steemBlockNum + '-' + steemTxId + '.txt'"
+            class="btn btn-sm btn-primary px-5"
+            @click="backupDownloaded = true"
+          >
+            Download Contract
+          </a>
+        </div>
+        Confirm that you downloaded the contract by entering your refund code below:
+        <b-form-input v-model="refundCodeConfirmation" type="text" placeholder="Enter your refund code here." class="my-3" />
+        <span class="small text-muted">
+          Don't worry! If you lose the refund code, simply <a href="/contact" target="_blank">contact us</a>!
+          We can manually refund the money, if you tell us the bank account you have sent it from.
+        </span>
+      </b-alert>
+      <div class="text-center mt-2">
+        <b-button
+          class="btn btn-light px-5"
+          :disabled="refundCode !== refundCodeConfirmation"
+          @click="$router.push('/contract/' + steemBlockNum + '/' + steemTxId)"
+        >
+          Continue
+        </b-button>
+      </div>
+    </b-modal>
   </b-container>
 </template>
 
@@ -191,6 +230,7 @@
 import crypto from 'crypto'
 import uuidv4 from 'uuid/v4'
 import steem from 'steem'
+import contractTxtTemplate from './contractTxtTemplate.js'
 
 export default {
   transition: {
@@ -199,12 +239,10 @@ export default {
   },
   data () {
     return {
-      error: null,
       availableCurrencies: [],
-      availableBankDetails: [],
       refundCode: null,
+      refundCodeConfirmation: null,
       referenceCode: null,
-      contractId: null,
       estimatedArrival: null,
       currency: 'USD',
       amount: 0,
@@ -219,12 +257,22 @@ export default {
           date: null
         },
         webhook: null
-      }
+      },
+      steemTxId: null,
+      steemBlockNum: null
     }
   },
   computed: {
-    bankDetails () {
-      return this.availableBankDetails.find(bd => bd.currency === this.currency)
+    downloadLink () {
+      const content = contractTxtTemplate
+        .replace('{{date}}', new Date())
+        .replace('{{contractLink}}', process.env.URL + '/contract/' + this.steemBlockNum + '/' + this.steemTxId)
+        .replace('{{refundCode}}', this.refundCode)
+        .replace('{{refundLink}}', process.env.URL + '/refund/' + this.steemBlockNum + '/' + this.steemTxId)
+        .replace('{{withdrawalLink}}', process.env.URL + '/withdraw/' + this.steemBlockNum + '/' + this.steemTxId)
+        .replace('{{requirements}}', '')
+        .replace('{{depositDetails}}', '')
+      return 'data:text/plain;base64,' + Buffer.from(content).toString('base64')
     }
   },
   mounted () {
@@ -232,13 +280,13 @@ export default {
       balances[0].balances.forEach((b) => {
         if (b.balanceType === 'AVAILABLE' && b.bankDetails !== null) {
           this.availableCurrencies.push(b.currency)
-          this.availableBankDetails.push(b.bankDetails)
         }
       })
     })
   },
   methods: {
     getRandomRef () {
+      // TODO: Look for existing ref codes and avoide duplicates (although very unlikely)
       // a trillion possibilities should be enough randomness here:
       const min = 68719476736 // smallest 10-digit hex value
       const max = 1099511627775 // biggest 10-digit hex value
@@ -248,7 +296,7 @@ export default {
     hash (string) {
       return crypto.createHash('sha256').update(string).digest('hex')
     },
-    saveContract () {
+    createContract () {
       this.$bvModal.show('loading-modal')
 
       this.refundCode = uuidv4()
@@ -289,7 +337,9 @@ export default {
           if (error) {
             this.$bvModal.show('error-modal')
           } else {
-            this.contractId = steemTx.id
+            this.steemTxId = steemTx.id
+            this.steemBlockNum = steemTx.block_num
+            this.$bvModal.show('download-modal')
           }
         }
       )
