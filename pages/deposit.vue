@@ -265,14 +265,53 @@ export default {
   computed: {
     downloadLink () {
       const content = contractTxtTemplate
-        .replace('{{date}}', new Date())
+        .replace('{{date}}', new Date().toLocaleDateString())
         .replace('{{contractLink}}', process.env.URL + '/contract/' + this.steemBlockNum + '/' + this.steemTxId)
         .replace('{{refundCode}}', this.refundCode)
         .replace('{{refundLink}}', process.env.URL + '/refund/' + this.steemBlockNum + '/' + this.steemTxId)
         .replace('{{withdrawalLink}}', process.env.URL + '/withdraw/' + this.steemBlockNum + '/' + this.steemTxId)
-        .replace('{{requirements}}', '')
-        .replace('{{depositDetails}}', '')
+        .replace('{{requirements}}', this.requirementsForTemplate)
+        .replace('{{depositDetails}}', this.depositDetailsForTemplate)
       return 'data:text/plain;base64,' + Buffer.from(content).toString('base64')
+    },
+    requirementsForTemplate () {
+      let string = ''
+
+      if (this.contract.password) {
+        string += `Password: ${this.contract.password}
+`
+      }
+
+      if (this.contract.email.address) {
+        string += this.contract.email.type === 'domain' ? 'E-Mail Domain: ' : 'E-Mail Address: '
+        string += `${this.contract.email.address}
+`
+      }
+
+      if (this.contract.date.date) {
+        string += this.contract.date.type === 'min' ? 'Minimum Date: ' : 'Maximum Date: '
+        string += `${this.contract.date.date}
+`
+      }
+
+      if (this.contract.webhook) {
+        string += `Webhook: ${this.contract.webhook}
+`
+      }
+
+      if (
+        !this.contract.password &&
+        !this.contract.email.address &&
+        !this.contract.date.date &&
+        !this.contract.webhook
+      ) {
+        string += `No requirements. Only refunding is possible.`
+      }
+
+      return string
+    },
+    depositDetailsForTemplate () {
+      return ''
     }
   },
   mounted () {
