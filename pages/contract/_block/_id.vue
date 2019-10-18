@@ -39,12 +39,14 @@
             :title="copyTooltip"
             variant="light"
             size="sm"
+            style="line-height: 2rem"
             @click="copy(withdrawalLink)"
           >
             <font-awesome-icon icon="copy" />
           </b-button>
           <nuxt-link
             class="btn btn-sm btn-light"
+            style="line-height: 2rem"
             :to="'/withdraw/' + $route.params.block + '/' + $route.params.id"
           >
             Withdraw
@@ -55,7 +57,7 @@
         <div v-if="contract.requirements.password">
           This contract is password protected.
         </div>
-        <template v-if="contract.requirements.email.address">
+        <template v-if="contract.requirements.email && contract.requirements.email.address">
           <div v-if="contract.requirements.email.type === 'domain'">
             <span>Ownership over an email address under the domain <b>{{ contract.requirements.email.address }}</b> is required.</span>
           </div>
@@ -63,7 +65,7 @@
             <span>Ownership over the email address <b>{{ contract.requirements.email.address }}</b> is required.</span>
           </div>
         </template>
-        <template v-if="contract.requirements.date.date">
+        <template v-if="contract.requirements.date && contract.requirements.date.date">
           <div v-if="contract.requirements.date.type === 'max'">
             <span>Withdrawal is only possible until <b>{{ contract.requirements.date.date }}</b>.</span>
           </div>
@@ -73,6 +75,9 @@
         </template>
         <div v-if="contract.requirements.webhook">
           The URL <b>{{ contract.requirements.webhook }}</b> must return a 200 OK status.
+        </div>
+        <div v-if="Object.keys(contract.requirements).length === 0">
+          This contract has no requirements. Anyone can withdraw the money at any time.
         </div>
       </div>
     </div>
@@ -117,6 +122,7 @@ export default {
   mounted () {
     this.$axios.$get(process.env.API_URL + '/contract/' + this.$route.params.block + '/' + this.$route.params.id).then((contract) => {
       this.contract = contract
+      console.log(JSON.stringify(contract))
     }).catch(() => {
       this.error = true
     })
