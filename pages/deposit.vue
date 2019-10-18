@@ -344,7 +344,8 @@ export default {
       const requirements = {}
 
       if (this.contract.password) {
-        requirements.password = this.hash(this.contract.password)
+        // TODO: stronger encryption
+        requirements.passwordHash = this.hash(this.contract.password)
       }
 
       if (this.contract.email.address) {
