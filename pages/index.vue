@@ -7,17 +7,17 @@
       Smart Contracts for real money.
     </h1>
     <b-row class="mt-5">
-      <b-col>
+      <b-col class="d-flex flex-column justify-content-between">
         <p class="lead text-white-50 mb-5 text-center">
-          Deposit money and set up a withdrawal contract...
+          Create a contract and deposit money from your bank account.
         </p>
         <b-button variant="light" size="lg" class="w-100" to="/deposit">
-          Deposit
+          Create Contract
         </b-button>
       </b-col>
-      <b-col>
+      <b-col class="d-flex flex-column justify-content-between">
         <p class="lead text-white-50 mb-5 text-center">
-          Or withdraw money, if you meet a contract's requirements.
+          Withdraw money from a contract if you meet it's requirements.
         </p>
         <b-button variant="light" size="lg" class="w-100">
           Withdraw
