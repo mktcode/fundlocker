@@ -51,12 +51,39 @@
           </nuxt-link>
         </b-input-group-append>
       </b-input-group>
-      <h2 class="text-center text-white mt-5">
-        Requirements
-      </h2>
-      <div class="text-center text-white">
-        {{ contract.requirements }}
+      <div class="text-center text-white mt-5">
+        <div v-if="contract.requirements.password">
+          This contract is password protected.
+        </div>
+        <template v-if="contract.requirements.email.address">
+          <div v-if="contract.requirements.email.type === 'domain'">
+            <span>Ownership over an email address under the domain <b>{{ contract.requirements.email.address }}</b> is required.</span>
+          </div>
+          <div v-else>
+            <span>Ownership over the email address <b>{{ contract.requirements.email.address }}</b> is required.</span>
+          </div>
+        </template>
+        <template v-if="contract.requirements.date.date">
+          <div v-if="contract.requirements.date.type === 'max'">
+            <span>Withdrawal is only possible until <b>{{ contract.requirements.date.date }}</b>.</span>
+          </div>
+          <div v-else>
+            <span>Withdrawal is only possible after <b>{{ contract.requirements.date.date }}</b>.</span>
+          </div>
+        </template>
+        <div v-if="contract.requirements.webhook">
+          The URL <b>{{ contract.requirements.webhook }}</b> must return a 200 OK status.
+        </div>
       </div>
+    </div>
+    <div v-else-if="error" class="text-white mt-5">
+      <b-alert variant="danger" show class="d-flex align-items-center justify-content-between">
+        <font-awesome-icon icon="exclamation-triangle" class="fa-2x ml-2 mr-3" />
+        <span>
+          This contract does not exist! Please make sure you are using the correct link. If you can solve the problem by yourself, feel free to <nuxt-link to="/contact">contact our support</nuxt-link>.
+        </span>
+        </nuxt-link>
+      </b-alert>
     </div>
     <div v-else class="text-white text-center mt-5">
       <font-awesome-icon icon="spinner" spin class="fa-2x" />
@@ -65,7 +92,6 @@
 </template>
 
 <script>
-import steem from 'steem'
 import copy from 'copy-to-clipboard'
 
 export default {
@@ -75,6 +101,7 @@ export default {
   },
   data () {
     return {
+      error: false,
       contract: null,
       copyTooltip: 'Copy'
     }
@@ -88,19 +115,10 @@ export default {
     }
   },
   mounted () {
-    steem.api.getBlock(this.$route.params.block, (error, block) => {
-      if (error) {
-      } else {
-        block.transactions.forEach((tx) => {
-          if (
-            tx.transaction_id === this.$route.params.id &&
-            tx.operations.length === 1 &&
-            tx.operations[0][1].id === 'contract'
-          ) {
-            this.contract = JSON.parse(tx.operations[0][1].json)
-          }
-        })
-      }
+    this.$axios.$get(process.env.API_URL + '/contract/' + this.$route.params.block + '/' + this.$route.params.id).then((contract) => {
+      this.contract = contract
+    }).catch(() => {
+      this.error = true
     })
   },
   methods: {
