@@ -183,7 +183,6 @@
         <span>
           An error occured! We were not able to store your contract. Please try again later or <nuxt-link to="/contact">click here to contact our support</nuxt-link>.
         </span>
-        </nuxt-link>
       </b-alert>
     </b-modal>
     <b-modal id="download-modal" centered no-close-on-esc no-close-on-backdrop>
