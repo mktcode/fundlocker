@@ -209,7 +209,7 @@
         <b-form-input v-model="refundCodeConfirmation" type="text" placeholder="Enter your refund code here." class="my-3" />
         <span class="small text-muted">
           Don't worry! If you lose the refund code, simply <a href="/contact" target="_blank">contact us</a>!
-          We can manually refund the money, if you tell us the bank account you have sent it from.
+          We can manually refund the money, if you tell us the bank account you have sent it from or the reference code.
         </span>
       </b-alert>
       <div class="text-center mt-2">
